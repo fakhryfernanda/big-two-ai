@@ -1,6 +1,6 @@
-from player import Player
-from deck import Deck
-from turn_manager import TurnManager
+from game.player import Player
+from game.deck import Deck
+from game.turn_manager import TurnManager
 
 class BigTwoGame:
     def __init__(self):

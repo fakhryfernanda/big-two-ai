@@ -1,6 +1,6 @@
 import random
-from big_two_game import BigTwoGame
-from logger import GameLogger
+from game.big_two import BigTwoGame
+from utils.logger import GameLogger
 
 def play_round(game, logger):
     """Executes a single round of the game and logs it."""

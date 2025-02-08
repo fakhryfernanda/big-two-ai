@@ -1,5 +1,5 @@
 import random
-from card import Card
+from game.card import Card
 from constants import RANKS, SUITS
 
 class Deck:
