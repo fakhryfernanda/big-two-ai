@@ -9,7 +9,7 @@ def main(max_round):
         player = game.current_player
         
         print(f"Round {round}")
-        print(f"Player {player}'s turn")
+        print(f"Player {player+1}'s turn")
         game.print_hands()
 
         playable_cards = game.find_playable_cards(player)
@@ -22,7 +22,7 @@ def main(max_round):
 
         if (game.is_game_over() == True):
             winner = game.last_played_by
-            print(f"Game over. The winner is player {winner}")
+            print(f"Game over. The winner is player {winner+1}")
             break
 
         print("\n")

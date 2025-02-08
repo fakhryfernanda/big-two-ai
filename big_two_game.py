@@ -12,7 +12,7 @@ class BigTwoGame:
         self.create_deck()
         self.deal_cards()
         self.current_player = self.determine_starting_player()  # Player with 3C starts
-        self.round = 0
+        self.round = 1
         self.first_move = True
 
     def create_deck(self):
@@ -43,7 +43,7 @@ class BigTwoGame:
         """Returns a list of all playable single cards for the given player."""
         player = self.players[player_index]
 
-        if (self.round == 0 and self.first_move):
+        if (self.round == 1 and self.first_move):
             return [card for card in player.hand if card.rank == '3' and card.suit == 'C']
         
         if not self.last_play:
@@ -54,12 +54,12 @@ class BigTwoGame:
     def play_turn(self, player_index, play):
         """Handles a player's move. 'play' is a single card or 'pass'."""
         if player_index != self.current_player:
-            print(f"Not your turn! It's Player {self.current_player}'s turn.")
+            print(f"Not your turn! It's Player {self.current_player+1}'s turn.")
             return
             
         if play == "pass":
             self.pass_count += 1
-            print(f"Player {player_index} passes.")
+            print(f"Player {player_index+1} passes.")
 
             if self.pass_count == 3:
                 print("All players passed! New round starts.")
@@ -73,7 +73,7 @@ class BigTwoGame:
                 self.last_play = play
                 self.last_played_by = player_index
                 self.pass_count = 0
-                print(f"Player {player_index} plays {play}")
+                print(f"Player {player_index+1} plays {play}")
 
                 if (play.rank == '3' and play.suit == 'C'):
                     self.first_move = False
@@ -85,7 +85,7 @@ class BigTwoGame:
 
     def validate_move(self, player_index, play):
         """Checks if the move follows Big Two rules."""
-        if self.round == 0 and self.first_move:
+        if self.round == 1 and self.first_move:
             return play.rank == '3' and play.suit == 'C'
 
         if self.last_play != None:
@@ -108,4 +108,4 @@ class BigTwoGame:
 
     def print_hands(self):
         for player in self.players:
-            print(f"Player {player.player_id}: {player.get_sorted_hand()}")
+            print(f"Player {player.player_id+1}: {player.get_sorted_hand()}")
