@@ -5,21 +5,27 @@ class CombinationFinder:
     def __init__(self, cards):
         self.cards = cards
 
-    def find_pairs(self):
-        """Find all valid pairs from the hand and sort them by rank."""
+    def _group_by_rank(self):
+        """Group cards by rank and return a dictionary."""
         rank_map = defaultdict(list)
-
-        # Group cards by rank
         for card in self.cards:
             rank_map[card.rank].append(card)
+        return rank_map
 
-        pairs = []
-        # Generate all possible pairs for ranks with at least 2 cards
+    def find_combinations(self, group_size):
+        """Find all valid combinations (pairs, triples, etc.) based on group_size."""
+        rank_map = self._group_by_rank()
+        combinations_list = []
+
         for rank, cards in rank_map.items():
-            if len(cards) >= 2:
-                pairs.extend(combinations(cards, 2))  # Get all unique pairs
+            if len(cards) >= group_size:
+                combinations_list.extend(combinations(cards, group_size))
 
-        # Sort pairs by rank (ascending) using card.value()
-        pairs.sort(key=lambda pair: pair[0].value()[0])
+        # Sort combinations by rank (ascending)
+        return sorted(combinations_list, key=lambda combo: combo[0].value()[0])
 
-        return pairs
+    def find_pairs(self):
+        return self.find_combinations(2)
+
+    def find_triples(self):
+        return self.find_combinations(3)

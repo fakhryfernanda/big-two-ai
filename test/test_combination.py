@@ -3,19 +3,22 @@ from utils.combination_finder import CombinationFinder
 from game.card import Card
 from constants import RANKS, SUITS
 
-def generate_random_hand():
-    """Generate a random hand of 13 unique cards."""
+def generate_random_hand(size=13):
+    """Generate a sorted random hand of 'size' unique cards."""
     deck = [Card(rank, suit) for rank in RANKS for suit in SUITS]
-    return random.sample(deck, 13)
+    random.shuffle(deck)
+    
+    return sorted(deck[:size], key=lambda card: card.value())
 
-def test_pair_finder():
-    """Test finding valid pairs from a random hand."""
-    hand = generate_random_hand()
+def test_combinations(hand, combination_type, size):
+    """Generic test function to find and display card combinations."""
     finder = CombinationFinder(hand)
-    pairs = finder.find_pairs()
-
-    print("Hand:", [str(card) for card in hand])
-    print("Valid Pairs:", [(str(c1), str(c2)) for c1, c2 in pairs])
+    combinations = finder.find_combinations(size)
+    print(f"{combination_type} found:", combinations)
 
 if __name__ == "__main__":
-    test_pair_finder()
+    hand = generate_random_hand()
+    print("Hand:", [str(card) for card in hand])
+
+    test_combinations(hand, "Pairs", 2)
+    test_combinations(hand, "Triples", 3)
