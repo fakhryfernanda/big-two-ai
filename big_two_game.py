@@ -38,8 +38,7 @@ class BigTwoGame:
 
     def handle_play(self, player_index, play):
         if not self.validate_move(play):
-            print("Invalid move!")
-            return
+            raise ValueError(f"Invalid move by Player {player_index+1}: {play}")
 
         self.players[player_index].remove_card(play)
         self.turn_manager.update_last_play(player_index, play)
