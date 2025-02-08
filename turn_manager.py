@@ -2,15 +2,18 @@ class TurnManager:
     def __init__(self):
         self.current_player = 0
         self.round = 1
+        self.turn_count = 1
         self.pass_count = 0
         self.last_play = None
         self.last_played_by = None
         self.first_move = True
 
     def next_player(self):
+        self.turn_count += 1
         self.current_player = (self.current_player + 1) % 4
 
     def reset_round(self):
+        self.turn_count = 0
         self.pass_count = 0
         self.round += 1
         self.last_play = None

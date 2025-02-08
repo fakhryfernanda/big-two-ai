@@ -4,7 +4,7 @@ from big_two_game import BigTwoGame
 def play_round(game):
     """Executes a single round of the game."""
     player = game.turn_manager.current_player
-    print(f"Round {game.turn_manager.round}")
+    print(f"Round {game.turn_manager.round} Turn {game.turn_manager.turn_count}")
     print(f"Player {player+1}'s turn")
     game.print_hands()
 
