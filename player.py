@@ -3,7 +3,7 @@ from collections import deque
 class Player:
     def __init__(self, player_id):
         self.player_id = player_id
-        self.hand = deque()  # Player's hand as a deque
+        self.hand = deque()
 
     def add_card(self, card):
         """Add a card to the player's hand and keep it sorted."""
@@ -15,9 +15,9 @@ class Player:
         for c in self.hand:
             if c.rank == card.rank and c.suit == card.suit:
                 self.hand.remove(c)
-                return True  # Successfully removed
-        print(f"{card} is not in player {self.player_id}'s hand!")
-        return False
+                return
+
+        raise ValueError(f"Card {card.rank}{card.suit} is not in the player's hand!")
 
     def has_card(self, rank, suit):
         """Check if the player has a specific card."""
