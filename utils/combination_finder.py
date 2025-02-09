@@ -1,5 +1,7 @@
 from collections import defaultdict
 from itertools import combinations
+from itertools import product
+from constants import RANKS
 
 class CombinationFinder:
     def __init__(self, cards):
@@ -29,3 +31,27 @@ class CombinationFinder:
 
     def find_triples(self):
         return self.find_combinations(3)
+    
+    def find_straights(self):
+        """Find all valid 5-card straights from the hand."""
+        rank_map = defaultdict(list)
+        
+        for card in self.cards:
+            rank_map[card.rank].append(card)
+        unique_ranks = list(rank_map.keys())
+                    
+        straights = []
+
+        # Iterate over all possible 5-card straight sequences
+        for i in range(len(unique_ranks) - 4):
+            consecutive_ranks = unique_ranks[i:i + 5]  # Take 5 consecutive ranks
+            
+            # Validate: Ensure they are strictly consecutive
+            expected_sequence = RANKS
+            if "".join(consecutive_ranks) in expected_sequence:
+                # Generate all possible straights using one card per rank
+                possible_straights = product(*[rank_map[rank] for rank in consecutive_ranks])
+                straights.extend([list(straight) for straight in possible_straights])
+
+        return straights
+
