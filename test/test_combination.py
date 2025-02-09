@@ -11,7 +11,7 @@ def generate_random_hand(size=13):
     return sorted(deck[:size], key=lambda card: card.value())
 
 def generate_hand():
-    card_strings = ['3H', '4D', '5C', '5H', '6H', '6S', '7H', '9H', '9S', '9D', '9C', 'JH', 'JS']
+    card_strings = ['3H', '4D', '5C', '5H', '6H', '6S', '7H', '9H', '9S', '9D', '9C', 'JH', 'JS', 'JC', 'JD']
     hand = [Card(card_str[:-1], card_str[-1]) for card_str in card_strings]
     return hand
 
@@ -33,4 +33,5 @@ if __name__ == "__main__":
 
     test_combinations(hand, "Pairs", 2)
     test_combinations(hand, "Triples", 3)
+    test_combinations(hand, "Four-of-a-Kind", 4)
     test_find_straights(hand)

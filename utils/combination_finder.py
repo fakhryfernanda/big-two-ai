@@ -32,6 +32,9 @@ class CombinationFinder:
     def find_triples(self):
         return self.find_combinations(3)
     
+    def find_quads(self):
+        return self.find_combinations(4)
+    
     def find_straights(self):
         """Find all valid 5-card straights from the hand."""
         rank_map = defaultdict(list)
