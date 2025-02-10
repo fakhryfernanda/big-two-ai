@@ -27,6 +27,12 @@ def test_find_straights(hand):
     straights = finder.find_straights()
     print("Straights found:", straights)
 
+def test_find_full_houses(hand):
+    """Test finding all valid full houses from a random hand."""
+    finder = CombinationFinder(hand)
+    full_houses = finder.find_full_houses()
+    print("Full houses found:", full_houses)
+
 if __name__ == "__main__":
     hand = generate_random_hand()
     print("Hand:", [str(card) for card in hand])
@@ -35,3 +41,5 @@ if __name__ == "__main__":
     test_combinations(hand, "Triples", 3)
     test_combinations(hand, "Four-of-a-Kind", 4)
     test_find_straights(hand)
+    test_find_full_houses(hand)
+

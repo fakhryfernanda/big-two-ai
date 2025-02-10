@@ -57,4 +57,21 @@ class CombinationFinder:
                 straights.extend([list(straight) for straight in possible_straights])
 
         return straights
+    
+    def find_full_houses(self):
+        """Find all valid Full House combinations (triple first, then pair)."""
+        triples = self.find_combinations(3)
+        pairs = self.find_combinations(2)
+        
+        full_houses = []
+
+        for triple in triples:
+            for pair in pairs:
+                if triple[0].rank != pair[0].rank:  # Ensure different ranks
+                    full_houses.append((*triple, *pair))  # Merge into one tuple
+
+        # Sort by the rank of the triple first, then pair
+        return sorted(full_houses, key=lambda combo: (combo[0].value()[0], combo[3].value()[0]))
+
+
 
