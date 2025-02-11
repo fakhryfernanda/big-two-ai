@@ -19,14 +19,19 @@ class CombinationFinder:
         for card in self.cards:
             suit_map[card.suit].append(card)
         return suit_map
-
-    def find_flushes(self):
-        """Find all valid flushes (5 cards of the same suit)."""
-        flushes = []
-        for suit, cards in self._group_by_suit().items():
-            if len(cards) >= 5:
-                flushes.extend(combinations(sorted(cards, key=lambda c: c.value()), 5))
-        return flushes
+    
+    def find_all_combinations(self):
+        """Find all valid combinations (pairs, triples, quads, straights, flushes, full houses, straight flushes, royal flushes)."""
+        return (
+            self.find_pairs() +
+            self.find_triples() +
+            self.find_quads() +
+            self.find_straights() +
+            self.find_flushes() +
+            self.find_full_houses() +
+            self.find_straight_flushes() +
+            self.find_royal_flushes()
+        )
 
     def find_combinations(self, group_size):
         """Find all valid combinations (pairs, triples, quads) based on group_size."""
@@ -72,6 +77,14 @@ class CombinationFinder:
             if triple[0].rank != pair[0].rank  # Ensure different ranks
         ]
         return sorted(full_houses, key=lambda combo: (combo[0].value()[0], combo[3].value()[0]))
+    
+    def find_flushes(self):
+        """Find all valid flushes (5 cards of the same suit)."""
+        flushes = []
+        for suit, cards in self._group_by_suit().items():
+            if len(cards) >= 5:
+                flushes.extend(combinations(sorted(cards, key=lambda c: c.value()), 5))
+        return flushes
 
     def find_straight_flushes(self):
         """Find all valid straight flushes (5 consecutive cards of the same suit)."""
