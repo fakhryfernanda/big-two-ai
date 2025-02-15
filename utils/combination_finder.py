@@ -23,6 +23,7 @@ class CombinationFinder:
     def find_all_combinations(self):
         """Find all valid combinations (pairs, triples, quads, straights, flushes, full houses, straight flushes, royal flushes)."""
         return (
+            list(self.cards) +
             self.find_pairs() +
             self.find_triples() +
             self.find_quads() +
@@ -55,16 +56,20 @@ class CombinationFinder:
         return "".join(ranks) in RANKS
 
     def find_straights(self):
-        """Find all valid 5-card straights."""
+        """Find all valid 5-card straights, excluding those that contain '2'."""
         rank_map = self._group_by_rank()
         unique_ranks = sorted(rank_map.keys(), key=RANKS.index)
         straights = []
 
         for i in range(len(unique_ranks) - 4):
             consecutive_ranks = unique_ranks[i:i + 5]
+
             if self._is_valid_straight(consecutive_ranks):
                 possible_straights = product(*[rank_map[rank] for rank in consecutive_ranks])
                 straights.extend(map(tuple, possible_straights))
+
+        # Remove any straight that includes '2'
+        straights = [straight for straight in straights if not any(card.rank == '2' for card in straight)]
 
         return straights
 
