@@ -1,3 +1,4 @@
+from game.card import Card
 from game.player import Player
 from game.deck import Deck
 from game.turn_manager import TurnManager
@@ -12,7 +13,7 @@ class BigTwoGame:
 
     def determine_starting_player(self):
         for player in self.players:
-            if player.has_card('3', 'C'):
+            if player.has_card(Card('3', 'C')):
                 return player.player_id
         raise ValueError("No player has 3C! The deck might be incorrect.")
 
@@ -37,14 +38,11 @@ class BigTwoGame:
             self.turn_manager.reset_round()
 
     def handle_play(self, player_index, play):
-        if not self.validate_move(play):
-            raise ValueError(f"Invalid move by Player {player_index+1}: {play}")
-
-        self.players[player_index].remove_card(play)
+        self.players[player_index].remove_cards(play)
         self.turn_manager.update_last_play(player_index, play)
         print(f"Player {player_index+1} plays {play}")
 
-        if play.rank == '3' and play.suit == 'C':
+        if self.turn_manager.first_move:
             self.turn_manager.first_move = False
 
     def validate_move(self, play):
