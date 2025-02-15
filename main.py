@@ -17,7 +17,7 @@ def play_round(game, logger):
     move = random.choice(playable_cards) if playable_cards else "pass"
 
     # Log current game state before play
-    hands_state = [p.get_sorted_hand() for p in game.players]
+    hands_state = [p.hand.sorted() for p in game.players]
     logger.log_turn(round_num, turn_count, hands_state, player, move)
 
     game.play_turn(player, move)

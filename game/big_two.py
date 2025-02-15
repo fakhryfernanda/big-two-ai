@@ -1,5 +1,5 @@
 from game.card import Card
-from game.player import Player
+from player.player import Player
 from game.deck import Deck
 from game.turn_manager import TurnManager
 
@@ -13,7 +13,7 @@ class BigTwoGame:
 
     def determine_starting_player(self):
         for player in self.players:
-            if player.has_card(Card('3', 'C')):
+            if player.hand.has_card(Card('3', 'C')):
                 return player.player_id
         raise ValueError("No player has 3C! The deck might be incorrect.")
 
@@ -38,7 +38,7 @@ class BigTwoGame:
             self.turn_manager.reset_round()
 
     def handle_play(self, player_index, play):
-        self.players[player_index].remove_cards(play)
+        self.players[player_index].hand.remove_cards(play)
         self.turn_manager.update_last_play(player_index, play)
         print(f"Player {player_index+1} plays {play}")
 
@@ -51,25 +51,25 @@ class BigTwoGame:
         return self.turn_manager.last_play is None or play.value() > self.turn_manager.last_play.value()
 
     def is_game_over(self):
-        return any(player.is_hand_empty() for player in self.players)
+        return any(player.hand.is_empty() for player in self.players)
 
     def find_playable_cards(self, player_index):
         player = self.players[player_index]
 
         if self.turn_manager.round == 1 and self.turn_manager.first_move:
-            return [card for card in player.hand if card.rank == '3' and card.suit == 'C']
+            return [card for card in player.hand.cards if card.rank == '3' and card.suit == 'C']
 
         if not self.turn_manager.last_play:
-            return player.hand
+            return player.hand.cards
 
-        return [card for card in player.hand if card.value() > self.turn_manager.last_play.value()]
+        return [card for card in player.hand.cards if card.value() > self.turn_manager.last_play.value()]
 
     def return_hand(self, player_index):
         if player_index not in range(4):
             print("There are only 4 players")
             return None
-        return self.players[player_index].get_sorted_hand()
+        return self.players[player_index].hand.sorted()
 
     def print_hands(self):
         for player in self.players:
-            print(f"Player {player.player_id+1}: {player.get_sorted_hand()}")
+            print(f"Player {player.player_id+1}: {player.hand.sorted()}")

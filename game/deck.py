@@ -10,4 +10,4 @@ class Deck:
     def deal(self, players):
         """Deals cards evenly to players."""
         for i, card in enumerate(self.cards):
-            players[i % 4].add_card(card)
+            players[i % 4].hand.add_card(card)
