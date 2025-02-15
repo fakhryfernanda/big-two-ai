@@ -1,4 +1,6 @@
 import random
+from constants import RANKS
+from game.card import Card
 from utils.combination_finder import CombinationFinder
 from utils.compare import compare_group
 
@@ -7,10 +9,15 @@ class PlaySelector:
         self.hand = hand
         self.finder = CombinationFinder(hand)
             
-    def find_playable_cards(self, last_played=None):
+    def find_playable_cards(self, last_played=None, first_card=False):
         """Choose a valid play that beats the last played hand."""
+        if isinstance(last_played, Card):
+            last_played = (last_played,)
+
+        if (first_card):
+            return [Card('3','C')]
+
         if not last_played:
-            # No last move → Play any single card or combination
             return self.finder.find_all_combinations()
 
         # Determine last played type
@@ -72,6 +79,16 @@ class PlaySelector:
             valid_moves = [rf for rf in self.finder.find_royal_flushes() if compare_group(rf, last_played) == 1]
 
         return valid_moves
+    
+    def is_straight(self, ranks):
+        """Check if a given list of ranks forms a valid 5-card straight."""
+        if '2' in ranks:
+            return False  # Straight cannot include '2'
+
+        rank_indices = [RANKS[:-1].index(rank) for rank in ranks]  # Convert ranks to indices
+        rank_indices.sort()  # Ensure the sequence is in order
+
+        return rank_indices == list(range(rank_indices[0], rank_indices[0] + 5))
 
     def _identify_five_card_type(self, five_card_hand):
         """Identify if a five-card play is a straight, flush, full house, etc."""
@@ -79,7 +96,7 @@ class PlaySelector:
         ranks = sorted(card.rank for card in five_card_hand)  # Sort by numeric value
 
         is_flush = len(suits) == 1  # All cards have the same suit
-        is_straight = ranks == list(range(int(ranks[0]), int(ranks[0]) + 5))  # Consecutive ranks
+        is_straight = self.is_straight(ranks)  # Consecutive ranks
 
         rank_counts = {card.rank: ranks.count(card.rank) for card in five_card_hand}
         has_triple = 3 in rank_counts.values()
