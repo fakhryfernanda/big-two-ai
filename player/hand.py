@@ -19,9 +19,7 @@ class Hand:
             for c in self.cards:
                 if c.rank == card.rank and c.suit == card.suit:
                     self.cards.remove(c)
-                    return
-                
-        raise ValueError(f"Card {card.rank}{card.suit} is not in the player's hand!")
+                    break                
     
     def has_card(self, card):
         """Check if the player has a specific card."""

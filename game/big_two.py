@@ -4,12 +4,23 @@ from game.deck import Deck
 from game.turn_manager import TurnManager
 
 class BigTwoGame:
-    def __init__(self):
+    def __init__(self, predefined_hands=None):
         self.players = [Player(i) for i in range(4)]
         self.deck = Deck()
         self.turn_manager = TurnManager()
-        self.deck.deal(self.players)
+
+        if predefined_hands:
+            self.set_predefined_hands(predefined_hands)
+        else:
+            self.deck.deal(self.players)  # Default random dealing
+
         self.turn_manager.current_player = self.determine_starting_player()
+
+    def set_predefined_hands(self, hands):
+        """Assign predefined hands to players."""
+        for i in range(4):
+            for card in hands[i]:
+                self.players[i].hand.add_card(Card(card[0], card[1]))
 
     def determine_starting_player(self):
         for player in self.players:
