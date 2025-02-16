@@ -9,13 +9,14 @@ class PlaySelector:
         self.hand = hand
         self.finder = CombinationFinder(hand)
             
-    def find_playable_cards(self, last_played=None, first_card=False):
+    def find_playable_cards(self, last_played=None, first_move=False):
         """Choose a valid play that beats the last played hand."""
         if isinstance(last_played, Card):
             last_played = (last_played,)
 
-        if (first_card):
-            return [Card('3','C')]
+        if (first_move):
+            all_combinations = self.finder.find_all_combinations()
+            return self.very_first_play(all_combinations)
 
         if not last_played:
             return self.finder.find_all_combinations()
@@ -115,3 +116,16 @@ class PlaySelector:
 
         raise ValueError(f"Invalid five-card combination: {five_card_hand}")
 
+    def very_first_play(self, combinations):
+        """Filter combinations to only include those that contain 3C."""
+        valid_combinations = []
+
+        for combo in combinations:
+            if isinstance(combo, tuple):  # Multi-card combo
+                if any(card.rank == "3" and card.suit == "C" for card in combo):
+                    valid_combinations.append(combo)
+            else:  # Single card
+                if combo.rank == "3" and combo.suit == "C":
+                    valid_combinations.append(combo)
+
+        return valid_combinations
