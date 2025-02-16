@@ -18,10 +18,6 @@ class BigTwoGame:
         raise ValueError("No player has 3C! The deck might be incorrect.")
 
     def play_turn(self, player_index, play):
-        if player_index != self.turn_manager.current_player:
-            print(f"Not your turn! It's Player {self.turn_manager.current_player+1}'s turn.")
-            return
-
         if play == "pass":
             self.handle_pass(player_index)
         else:
@@ -52,17 +48,6 @@ class BigTwoGame:
 
     def is_game_over(self):
         return any(player.hand.is_empty() for player in self.players)
-
-    def find_playable_cards(self, player_index):
-        player = self.players[player_index]
-
-        if self.turn_manager.round == 1 and self.turn_manager.first_move:
-            return [card for card in player.hand.cards if card.rank == '3' and card.suit == 'C']
-
-        if not self.turn_manager.last_play:
-            return player.hand.cards
-
-        return [card for card in player.hand.cards if card.value() > self.turn_manager.last_play.value()]
 
     def return_hand(self, player_index):
         if player_index not in range(4):

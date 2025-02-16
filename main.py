@@ -1,26 +1,26 @@
-import random
 from game.big_two import BigTwoGame
 from utils.logger import GameLogger
 
 def play_round(game, logger):
     """Executes a single round of the game and logs it."""
-    player = game.turn_manager.current_player
+    player_index = game.turn_manager.current_player
     round_num = game.turn_manager.round
     turn_count = game.turn_manager.turn_count
 
     print(f"Round {round_num} Turn {turn_count}")
-    print(f"Player {player+1}'s turn")
+    print(f"Player {player_index+1}'s turn")
     game.print_hands()
 
-    # Find playable cards and decide move
-    playable_cards = game.find_playable_cards(player)
-    move = random.choice(playable_cards) if playable_cards else "pass"
+    # Player make a move
+    player = game.players[player_index]
+    move = player.play_turn(game.turn_manager.last_play, game.turn_manager.first_move)
 
     # Log current game state before play
-    hands_state = [p.hand.sorted() for p in game.players]
-    logger.log_turn(round_num, turn_count, hands_state, player, move)
+    hands_state = [player.hand.sorted() for player in game.players]
+    logger.log_turn(round_num, turn_count, hands_state, player_index, move)
 
-    game.play_turn(player, move)
+    # Game handle the turn
+    game.play_turn(player_index, move)
 
 def main(max_rounds):
     game = BigTwoGame()
