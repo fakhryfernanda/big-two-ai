@@ -1,7 +1,9 @@
 import subprocess
 from config import GameConfig
 
-for i in range(GameConfig.TEST_ITERATION):
+N = GameConfig.TEST_ITERATION
+
+for i in range(N):
     print(f"Running iteration {i+1}/{N}...")
     result = subprocess.run(["python", "main.py"], capture_output=True, text=True)
     
