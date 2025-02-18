@@ -1,6 +1,5 @@
 import random
-from settings.params import WEIGHTS
-from settings.params import PASS_PROBABILITY
+from config import GameConfig
 from player.hand import Hand
 from brain.play_selector import PlaySelector
 
@@ -11,7 +10,7 @@ class Player:
 
     def play_turn(self, last_played, first_move):
         # Chance to pass
-        if random.random() < PASS_PROBABILITY:
+        if random.random() < GameConfig.PASS_PROBABILITY:
             return "pass"
         
         playable_cards = PlaySelector(self.hand.cards).find_playable_cards(last_played, first_move)
@@ -23,7 +22,7 @@ class Player:
         
         for play in playable_cards:
             num_cards = len(play) if isinstance(play, tuple) else 1  # Handle single-card plays
-            weight = WEIGHTS.get(self._get_play_type(num_cards), 1)  # Default weight = 1
+            weight = GameConfig.WEIGHTS.get(self._get_play_type(num_cards), 1)  # Default weight = 1
             weighted_choices.extend([play] * weight)  # Add play multiple times based on weight
 
         return random.choice(weighted_choices)  # Choose a play randomly, considering weights
