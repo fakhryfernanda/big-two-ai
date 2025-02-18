@@ -1,3 +1,8 @@
+import cProfile
+import pstats
+import io
+import os
+import datetime
 from game.big_two import BigTwoGame
 from utils.logger import GameLogger
 
@@ -41,5 +46,30 @@ def main(max_rounds):
     logger.save_log()
 
 if __name__ == "__main__":
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    directory = "profiling"
+    os.makedirs(directory, exist_ok=True)
+    filename = os.path.join(directory, f"profile_results_{timestamp}.txt")
+
+    # Enable profiling
+    profiler = cProfile.Profile()
+    profiler.enable()
+
     MAX_ROUNDS = 20
     main(MAX_ROUNDS)
+
+    # Disable profiling and print stats
+    profiler.disable()
+    stream = io.StringIO()
+    stats = pstats.Stats(profiler, stream=stream)
+    stats.strip_dirs().sort_stats("tottime").print_stats(20)  # Show top 20 slowest functions
+
+    print(stream.getvalue())  # Print profiling results
+
+    with open(filename, "w") as f:
+        stream = io.StringIO()
+        stats = pstats.Stats(profiler, stream=stream)
+        stats.strip_dirs().sort_stats("tottime").print_stats(20)  # Show top 20 slowest functions
+        f.write(stream.getvalue())  # Save results to file
+
+    print(f"Profiling results saved to {filename}")
