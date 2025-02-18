@@ -6,7 +6,7 @@ import datetime
 from game.big_two import BigTwoGame
 from utils.logger import GameLogger
 
-def play_round(game, logger):
+def play_round(game, logger, logging_enabled):
     """Executes a single round of the game and logs it."""
     player_index = game.turn_manager.current_player
     round_num = game.turn_manager.round
@@ -16,36 +16,40 @@ def play_round(game, logger):
     print(f"Player {player_index+1}'s turn")
     game.print_hands()
 
-    # Player make a move
+    # Player makes a move
     player = game.players[player_index]
     move = player.play_turn(game.turn_manager.last_play, game.turn_manager.first_move)
 
-    # Log current game state before play
-    hands_state = [player.hand.sorted() for player in game.players]
-    logger.log_turn(round_num, turn_count, hands_state, player_index, move)
+    # Log current game state before play if logging is enabled
+    if logging_enabled:
+        hands_state = [player.hand.sorted() for player in game.players]
+        logger.log_turn(round_num, turn_count, hands_state, player_index, move)
 
-    # Game handle the turn
+    # Game handles the turn
     game.play_turn(player_index, move)
 
-def main(max_rounds):
+def main(max_rounds, logging_enabled):
     game = BigTwoGame()
-    logger = GameLogger()
+    logger = GameLogger() if logging_enabled else None
 
     while game.turn_manager.round < max_rounds:
-        play_round(game, logger)
+        play_round(game, logger, logging_enabled)
 
         if game.is_game_over():
             print(f"Game over. The winner is Player {game.turn_manager.last_played_by + 1}")
             print("\n")
-            logger.log_winner(game.turn_manager.last_played_by)
+            if logging_enabled:
+                logger.log_winner(game.turn_manager.last_played_by)
             break
 
         print()
 
-    # Save game log at the end
-    logger.save_log()
+    # Save game log at the end if logging is enabled
+    if logging_enabled:
+        logger.save_log()
 
 if __name__ == "__main__":
+    logging_enabled = True  # Set to False to disable logging
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     directory = "profiling"
     os.makedirs(directory, exist_ok=True)
@@ -56,7 +60,7 @@ if __name__ == "__main__":
     profiler.enable()
 
     MAX_ROUNDS = 20
-    main(MAX_ROUNDS)
+    main(MAX_ROUNDS, logging_enabled)
 
     # Disable profiling and print stats
     profiler.disable()
