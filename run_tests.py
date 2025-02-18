@@ -1,6 +1,7 @@
 import subprocess
+from config import GameConfig
 
-N = 10  # Number of times to run main.py
+N = GameConfig.TEST_ITERATION
 
 for i in range(N):
     print(f"Running iteration {i+1}/{N}...")
