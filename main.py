@@ -36,6 +36,7 @@ def play_round(game, logger):
 def run_game(max_rounds, logger=None):
     """Runs the main game loop."""
     game = BigTwoGame()
+    print("Game start.")
 
     while game.turn_manager.round < max_rounds:
         play_round(game, logger)
