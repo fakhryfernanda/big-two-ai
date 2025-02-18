@@ -13,16 +13,19 @@ def play_round(game, logger):
         'turn': game.turn_manager.turn_count,
         'player': player_index
     }
-    
-    print(f"Round {game_state['round']} Turn {game_state['turn']}")
-    print(f"Player {player_index + 1}'s turn")
-    game.print_hands()
+
+    # Print game state if PRINT_GAME_ENABLED is set to True
+    if GameConfig.PRINT_GAME_ENABLED:
+        print()
+        print(f"Round {game_state['round']} Turn {game_state['turn']}")
+        print(f"Player {player_index + 1}'s turn")
+        game.print_hands()
 
     # Player makes a move
     player = game.players[player_index]
     move = player.play_turn(game.turn_manager.last_play, game.turn_manager.first_move)
 
-    # Log game state if enabled
+    # Log game state if logging is enabled
     if logger:
         hands_state = [player.hand.sorted() for player in game.players]
         logger.log_turn(game_state['round'], game_state['turn'], 
@@ -39,12 +42,10 @@ def run_game(max_rounds, logger=None):
 
         if game.is_game_over():
             winner = game.turn_manager.last_played_by
-            print(f"Game over. The winner is Player {winner + 1}\n")
+            print(f"Game over. The winner is Player {winner + 1}")
             if logger:
                 logger.log_winner(winner)
             break
-
-        print()
 
     if logger:
         logger.save_log()

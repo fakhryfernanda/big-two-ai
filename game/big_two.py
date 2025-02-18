@@ -1,3 +1,4 @@
+from config import GameConfig
 from game.card import Card
 from player.player import Player
 from game.deck import Deck
@@ -38,16 +39,21 @@ class BigTwoGame:
 
     def handle_pass(self, player_index):
         self.turn_manager.pass_count += 1
-        print(f"Player {player_index+1} passes.")
+        
+        if GameConfig.PRINT_GAME_ENABLED:
+            print(f"Player {player_index+1} passes.")
 
         if self.turn_manager.pass_count == 3:
-            print("All players passed! New round starts.")
+            if GameConfig.PRINT_GAME_ENABLED:
+                print("All players passed! New round starts.")
             self.turn_manager.reset_round()
 
     def handle_play(self, player_index, play):
         self.players[player_index].hand.remove_cards(play)
         self.turn_manager.update_last_play(player_index, play)
-        print(f"Player {player_index+1} plays {play}")
+        
+        if GameConfig.PRINT_GAME_ENABLED:
+            print(f"Player {player_index+1} plays {play}")
 
         if self.turn_manager.first_move:
             self.turn_manager.first_move = False
