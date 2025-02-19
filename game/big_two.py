@@ -58,11 +58,6 @@ class BigTwoGame:
         if self.turn_manager.first_move:
             self.turn_manager.first_move = False
 
-    def validate_move(self, play):
-        if self.turn_manager.round == 1 and self.turn_manager.first_move:
-            return play.rank == '3' and play.suit == 'C'
-        return self.turn_manager.last_play is None or play.value() > self.turn_manager.last_play.value()
-
     def is_game_over(self):
         return any(player.hand.is_empty() for player in self.players)
 
@@ -73,5 +68,10 @@ class BigTwoGame:
         return self.players[player_index].hand.sorted()
 
     def print_hands(self):
+        if GameConfig.PLAYER_1_IS_USER:
+            if self.turn_manager.current_player == 0:
+                print(f"Player 1: {self.players[0].hand.sorted()}")
+            return
+
         for player in self.players:
             print(f"Player {player.player_id+1}: {player.hand.sorted()}")

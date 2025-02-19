@@ -1,4 +1,7 @@
-class GameConfig:        
+class GameConfig:
+    # Player settings
+    PLAYER_1_IS_USER = True
+
     # Game settings
     MAX_ROUNDS = 20
     WEIGHTS = {
@@ -14,10 +17,10 @@ class GameConfig:
     PROFILE_DIR = "profiling"
     TOP_STATS_COUNT = 20
     PROFILING_ENABLED = False
-    PRINT_GAME_ENABLED = False
+    PRINT_GAME_ENABLED = True
     
     # AI
-    PASS_PROBABILITY = 0.1
+    PASS_PROBABILITY = 0.05
 
     # Number of times to run main.py when run test
     TEST_ITERATION = 5 

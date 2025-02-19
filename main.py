@@ -3,6 +3,7 @@ import datetime
 from config import GameConfig
 from profiling import GameProfiler
 from game.big_two import BigTwoGame
+from game.card import Card
 from utils.logger import GameLogger
 
 def play_round(game, logger):
@@ -23,7 +24,14 @@ def play_round(game, logger):
 
     # Player makes a move
     player = game.players[player_index]
-    move = player.play_turn(game.turn_manager.last_play, game.turn_manager.first_move)
+    
+    # If the player is the user-controlled player (Player 1), get user input
+    if GameConfig.PLAYER_1_IS_USER and player_index == 0:
+        print("Player 1, it's your turn!")
+        move = player.get_user_move(game.turn_manager.last_play, game.turn_manager.first_move)
+    else:
+        # AI or automated player makes a move
+        move = player.bot_play_turn(game.turn_manager.last_play, game.turn_manager.first_move)
 
     # Log game state if logging is enabled
     if logger:
