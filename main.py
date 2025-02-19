@@ -25,19 +25,16 @@ def play_round(game, logger):
     # Player makes a move
     player = game.players[player_index]
     
-    # If the player is the user-controlled player (Player 1), get user input
     if GameConfig.PLAYER_1_IS_USER and player_index == 0:
         print("Player 1, it's your turn!")
         move = player.get_user_move(game.turn_manager.last_play, game.turn_manager.first_move)
     else:
-        # AI or automated player makes a move
         move = player.bot_play_turn(game.turn_manager.last_play, game.turn_manager.first_move)
 
     # Log game state if logging is enabled
     if logger:
         hands_state = [player.hand.sorted() for player in game.players]
-        logger.log_turn(game_state['round'], game_state['turn'], 
-                       hands_state, player_index, move)
+        logger.log_turn(game_state['round'], game_state['turn'], hands_state, player_index, move)
 
     game.play_turn(player_index, move)
 
@@ -45,6 +42,11 @@ def run_game(max_rounds, logger=None):
     """Runs the main game loop."""
     game = BigTwoGame()
     print("Game start.")
+
+    # Log initial hands before the first round starts
+    if logger:
+        initial_hands = [player.hand.sorted() for player in game.players]
+        logger.log_initial_hands(initial_hands)
 
     while game.turn_manager.round < max_rounds:
         play_round(game, logger)
@@ -63,8 +65,7 @@ def main():
     if GameConfig.PROFILING_ENABLED:
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         os.makedirs(GameConfig.PROFILE_DIR, exist_ok=True)
-        profile_file = os.path.join(GameConfig.PROFILE_DIR, 
-                                   f"profile_results_{timestamp}.txt")
+        profile_file = os.path.join(GameConfig.PROFILE_DIR, f"profile_results_{timestamp}.txt")
         
         # Initialize profiler
         profiler = GameProfiler(GameConfig.PROFILE_DIR, GameConfig.TOP_STATS_COUNT)
@@ -83,7 +84,6 @@ def main():
         # Run without profiling
         logger = GameLogger() if GameConfig.LOGGING_ENABLED else None
         run_game(GameConfig.MAX_ROUNDS, logger)
-
 
 if __name__ == "__main__":
     main()

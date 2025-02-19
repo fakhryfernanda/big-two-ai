@@ -1,6 +1,6 @@
 class GameConfig:
     # Player settings
-    PLAYER_1_IS_USER = True
+    PLAYER_1_IS_USER = False
 
     # Game settings
     MAX_ROUNDS = 20
@@ -16,8 +16,8 @@ class GameConfig:
     LOGGING_ENABLED = True
     PROFILE_DIR = "profiling"
     TOP_STATS_COUNT = 20
-    PROFILING_ENABLED = False
-    PRINT_GAME_ENABLED = True
+    PROFILING_ENABLED = True
+    PRINT_GAME_ENABLED = False
     
     # AI
     PASS_PROBABILITY = 0.05
