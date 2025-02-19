@@ -12,13 +12,18 @@ class GameConfig:
         "five_card": 5
     }
     
-    # Feature settings
+    # Print settings
+    PRINT_GAME_ENABLED = False
+    
+    # Logging settings
     LOGGING_ENABLED = True
+    SIMPLIFIED_LOGGING = True
+
+    # Profiling settings
     PROFILE_DIR = "profiling"
     TOP_STATS_COUNT = 20
     PROFILING_ENABLED = True
-    PRINT_GAME_ENABLED = False
-    
+
     # AI
     PASS_PROBABILITY = 0.05
 
