@@ -1,5 +1,6 @@
 import os
 import json
+from config import GameConfig
 from datetime import datetime
 
 class GameLogger:
@@ -38,7 +39,11 @@ class GameLogger:
     def save_log(self):
         """Saves the entire game log to a JSON file with a timestamped filename."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]  # Up to milliseconds
-        filename = os.path.join(self.log_dir, f"{timestamp}.json")
+            
+        if GameConfig.PLAYER_1_IS_USER:
+            filename = os.path.join(self.log_dir, f"USER_{timestamp}.json")
+        else:
+            filename = os.path.join(self.log_dir, f"{timestamp}.json")
 
         log_data = {
             "game_log": self.game_log,

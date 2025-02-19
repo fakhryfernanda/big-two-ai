@@ -13,7 +13,7 @@ class GameConfig:
     }
     
     # Feature settings
-    LOGGING_ENABLED = False
+    LOGGING_ENABLED = True
     PROFILE_DIR = "profiling"
     TOP_STATS_COUNT = 20
     PROFILING_ENABLED = False
